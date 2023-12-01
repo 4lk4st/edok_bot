@@ -4,7 +4,6 @@ import sys
 
 from aiogram import types
 from aiogram.filters import CommandStart
-from aiogram.types import Message
 from aiogram.utils.markdown import hbold
 
 from create_bot import dp, bot
@@ -12,21 +11,37 @@ from create_bot import dp, bot
 
 
 @dp.message(CommandStart())
-async def command_start_handler(message: Message) -> None:
+async def command_start_handler(message: types.Message) -> None:
     """
-    This handler receives messages with `/start` command
+    Обработчик команды `/start`
     """
-    await message.answer(f"Привет, {hbold(message.from_user.full_name)}!")
-    await message.answer("Выбери с помощью кнопок внизу, какую еду ты хочешь"
-                         " заказать на сегодня!")
+    kb = [
+        [
+            types.KeyboardButton(text="Салаты"),
+            types.KeyboardButton(text="Каши")
+        ],
+        [
+            types.KeyboardButton(text="Вторые блюда"),
+            types.KeyboardButton(text="Выпечка")
+        ],
+        [
+            types.KeyboardButton(text="Напитки и десерты")
+        ],
+    ]
+    
+    keyboard = types.ReplyKeyboardMarkup(
+        keyboard=kb,
+        resize_keyboard=True,
+        input_field_placeholder="Выберите раздел меню"
+    )
+
+    await message.answer(f"Добрый день, {hbold(message.from_user.full_name)}!")
+    await message.answer("Чтобы сделать заказ, сначала выберите раздел меню, "
+                         "а затем выберите нужное Вам блюдо!",
+                         reply_markup=keyboard)
 
 @dp.message()
 async def echo_handler(message: types.Message) -> None:
-    """
-    Handler will forward receive a message back to the sender
-    By default, message handler will handle all message types
-    (like a text, photo, sticker etc.)
-    """
     await message.answer("Писать мне текст бесполезно, я не отвечу =( "
                          "Пожалуйста, для выбора еды пользуйся кнопками")
 
