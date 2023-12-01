@@ -40,11 +40,6 @@ async def command_start_handler(message: types.Message) -> None:
                          "а затем выберите нужное Вам блюдо!",
                          reply_markup=keyboard)
 
-@dp.message()
-async def echo_handler(message: types.Message) -> None:
-    await message.answer("Писать мне текст бесполезно, я не отвечу =( "
-                         "Пожалуйста, для выбора еды пользуйся кнопками")
-
 
 async def main() -> None:
     await dp.start_polling(bot)
