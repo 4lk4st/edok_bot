@@ -1,2 +1,2 @@
-from handlers import menu
+from handlers import food
 from handlers import other
