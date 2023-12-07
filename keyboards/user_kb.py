@@ -8,13 +8,19 @@ for i in list(monday_menu.keys()):
     builder.add(types.KeyboardButton(text=str(i)))
 builder.adjust(3)
 
-# user_keyboard = types.ReplyKeyboardMarkup(
-#     keyboard=kb,
-#     resize_keyboard=True,
-#     input_field_placeholder="Выбери блюдо"
-# )
-
-user_keyboard = builder.as_markup(
+food_keyboard = builder.as_markup(
     resize_keyboard=True,
     input_field_placeholder="Выбери блюдо"
+)
+
+
+start_kb = [
+    [types.KeyboardButton(text="Выслать меню"),
+    types.KeyboardButton(text="Сделать заказ")]
+]
+
+start_keyboard = types.ReplyKeyboardMarkup(
+    keyboard=start_kb,
+    resize_keyboard=True,
+    input_field_placeholder="Выбери действие"
 )
