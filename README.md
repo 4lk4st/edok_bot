@@ -8,6 +8,7 @@ Telegram bot for ordering food in small company.
 ## To-Do List:
 - [x] separate project structure
 - [x] dynamic keyboard for menu
+- [ ] sending menu pic / order button
 - [ ] FSM for ordering
 - [ ] integration with database (mb Google Sheets?)
 - [ ] notification for users in weekend-days (outer middleware)
