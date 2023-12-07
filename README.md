@@ -1,2 +1,16 @@
 # edok_bot
-Telegram bot for food ordering in small company
+Telegram bot for ordering food in small company.
+
+## Stack:
+- python
+- aiogram 3.2.0
+
+## To-Do List:
+- [x] separate project structure
+- [x] dynamic keyboard for menu
+- [ ] FSM for ordering
+- [ ] integration with database (mb Google Sheets?)
+- [ ] notification for users in weekend-days (outer middleware)
+- [ ] Dockerfile for remote server
+- [ ] CI
+- [ ] CD
