@@ -2,18 +2,15 @@ import asyncio
 import logging
 import sys
 
-from aiogram import types
-
 from create_bot import dp, bot
 from handlers import food, other
 
 
-food.register_handlers_food(dp)
-# other.register_handlers_other(dp)
-
-
 async def main() -> None:
     try:
+        dp.include_routers(food.router, other.router)
+        
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
     finally:
         await bot.session.close()
