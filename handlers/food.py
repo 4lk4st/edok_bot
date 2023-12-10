@@ -1,12 +1,18 @@
 import os
 from aiogram import types, Router, F
+from aiogram.filters import StateFilter
 from aiogram.filters.command import CommandStart
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 
-from keyboards import food_keyboard, start_keyboard, monday_menu
+from keyboards import make_row_keyboard, start_keyboard, monday_menu
 from create_bot import bot
 
 
 router = Router()
+
+class OrderFood(StatesGroup):
+    choosing_food = State()
 
 
 @router.message(CommandStart())
@@ -27,17 +33,31 @@ async def command_food(
                          reply_markup=start_keyboard)
 
 
-@router.message(F.text.lower() == "сделать заказ")
+@router.message(StateFilter(None), F.text.lower() == "сделать заказ")
 async def command_food(
     message: types.Message,
+    state: FSMContext
 ) -> None:
-    await message.answer("Чтобы сделать заказ, выбери блюдо!",
-                         reply_markup=food_keyboard)
+    await message.answer(
+        "Чтобы сделать заказ, выбери блюдо!",
+        reply_markup=make_row_keyboard(list(monday_menu.keys()))
+    )
+    
+    await state.set_state(OrderFood.choosing_food)
 
 
-@router.message(F.text.in_(list(monday_menu.keys())))
+@router.message(
+    OrderFood.choosing_food,
+    F.text.in_(list(monday_menu.keys())))
 async def command_food(
     message: types.Message,
+    state: FSMContext
 ) -> None:
-    await message.answer("Заказ принят!",
-                         reply_markup=types.ReplyKeyboardRemove())
+    await state.update_data(chosen_food=message.text.lower())
+    order_data = await state.get_data()
+    await message.answer(
+        text=f"Ваш заказ: {order_data['chosen_food']}.",
+        reply_markup=make_row_keyboard(list(monday_menu.keys()))
+    )
+    # await message.answer("Заказ принят!",
+    #                      reply_markup=types.ReplyKeyboardRemove())

@@ -1,18 +1,6 @@
 from aiogram import types
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-from .data import monday_menu
-
-builder = ReplyKeyboardBuilder()
-for i in list(monday_menu.keys()):
-    builder.add(types.KeyboardButton(text=str(i)))
-builder.adjust(3)
-
-food_keyboard = builder.as_markup(
-    resize_keyboard=True,
-    input_field_placeholder="Выбери блюдо"
-)
-
 
 start_kb = [
     [types.KeyboardButton(text="Выслать меню"),
@@ -24,3 +12,15 @@ start_keyboard = types.ReplyKeyboardMarkup(
     resize_keyboard=True,
     input_field_placeholder="Выбери действие"
 )
+
+def make_row_keyboard(items: list[str]) -> types.ReplyKeyboardMarkup:
+    builder = ReplyKeyboardBuilder()
+    for item in items:
+        builder.add(types.KeyboardButton(text=str(item)))
+    builder.adjust(3)
+
+    user_keyboard = builder.as_markup(
+        resize_keyboard=True,
+    )
+
+    return user_keyboard
