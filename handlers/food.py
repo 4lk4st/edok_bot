@@ -1,4 +1,5 @@
 import os
+import json
 from aiogram import types, Router, F
 from aiogram.filters import StateFilter
 from aiogram.filters.command import CommandStart
@@ -53,10 +54,22 @@ async def command_food(
     message: types.Message,
     state: FSMContext
 ) -> None:
-    await state.update_data(chosen_food=message.text.lower())
-    order_data = await state.get_data()
+    
+    food = message.text.lower()
+    current_order_data = await state.get_data()
+    if food not in current_order_data:
+        await state.update_data(
+            {f"{food}": 1}
+        )
+    else:
+        current_quantity = current_order_data[food]
+        await state.update_data(
+            {f"{food}": current_quantity + 1}
+        )
+    
+    final_order_data = await state.get_data()
     await message.answer(
-        text=f"Ваш заказ: {order_data['chosen_food']}.",
+        text=f"Ваш заказ: {json.dumps(final_order_data, ensure_ascii=False)}.",
         reply_markup=make_row_keyboard(list(monday_menu.keys()))
     )
     # await message.answer("Заказ принят!",
