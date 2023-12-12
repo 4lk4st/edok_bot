@@ -25,7 +25,7 @@ async def command_start(
 
 
 @router.message(F.text.lower() == "выслать меню")
-async def command_food(
+async def send_menu(
     message: types.Message,
 ) -> None:
     document = types.FSInputFile("data/menu_example.pdf", filename="menu.pdf")
@@ -35,7 +35,7 @@ async def command_food(
 
 
 @router.message(StateFilter(None), F.text.lower() == "сделать заказ")
-async def command_food(
+async def open_menu_kb(
     message: types.Message,
     state: FSMContext
 ) -> None:
@@ -50,7 +50,7 @@ async def command_food(
 @router.message(
     OrderFood.choosing_food,
     F.text.in_(list(monday_menu.keys())))
-async def command_food(
+async def choose_food(
     message: types.Message,
     state: FSMContext
 ) -> None:
@@ -69,8 +69,25 @@ async def command_food(
     
     final_order_data = await state.get_data()
     await message.answer(
-        text=f"Ваш заказ: {json.dumps(final_order_data, ensure_ascii=False)}.",
+        text=f"Вы выбрали: {json.dumps(final_order_data, ensure_ascii=False)}."
+    )
+    await message.answer(
+        text=("Добавление блюд в заказ - кнопка с соответствующим блюдом, " 
+              "завершение заказа - кнопка 'Завершить заказ'"),
         reply_markup=make_row_keyboard(list(monday_menu.keys()))
     )
-    # await message.answer("Заказ принят!",
-    #                      reply_markup=types.ReplyKeyboardRemove())
+
+@router.message(
+    OrderFood.choosing_food,
+    F.text.lower() == "завершить заказ")
+async def send_order(
+    message: types.Message,
+    state: FSMContext
+) -> None:
+    final_order_data = await state.get_data()
+    await message.answer(
+        text=(f"Ваш заказ: {json.dumps(final_order_data, ensure_ascii=False)} "
+              "направлен администратору."),
+        reply_markup=types.ReplyKeyboardRemove()
+    )
+    await state.clear()

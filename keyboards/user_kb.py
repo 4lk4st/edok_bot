@@ -17,6 +17,7 @@ def make_row_keyboard(items: list[str]) -> types.ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
     for item in items:
         builder.add(types.KeyboardButton(text=str(item)))
+    builder.add(types.KeyboardButton(text="Завершить заказ"))
     builder.adjust(3)
 
     user_keyboard = builder.as_markup(
