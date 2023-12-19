@@ -1,13 +1,15 @@
-import os
 import json
+from datetime import date, datetime, timedelta
+
 from aiogram import types, Router, F
 from aiogram.filters import StateFilter
 from aiogram.filters.command import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from keyboards import make_row_keyboard, start_keyboard, monday_menu
+from keyboards import make_row_keyboard, start_keyboard, menu
 from create_bot import bot
+from create_gsheet import write_to_gsheet
 
 
 router = Router()
@@ -41,7 +43,7 @@ async def open_menu_kb(
 ) -> None:
     await message.answer(
         "Чтобы сделать заказ, выбери блюдо!",
-        reply_markup=make_row_keyboard(list(monday_menu.keys()))
+        reply_markup=make_row_keyboard(list(menu.keys()))
     )
     
     await state.set_state(OrderFood.choosing_food)
@@ -49,7 +51,7 @@ async def open_menu_kb(
 
 @router.message(
     OrderFood.choosing_food,
-    F.text.in_(list(monday_menu.keys())))
+    F.text.in_(list(menu.keys())))
 async def choose_food(
     message: types.Message,
     state: FSMContext
@@ -74,7 +76,7 @@ async def choose_food(
     await message.answer(
         text=("Добавление блюд в заказ - кнопка с соответствующим блюдом, " 
               "завершение заказа - кнопка 'Завершить заказ'"),
-        reply_markup=make_row_keyboard(list(monday_menu.keys()))
+        reply_markup=make_row_keyboard(list(menu.keys()))
     )
 
 @router.message(
@@ -84,10 +86,19 @@ async def send_order(
     message: types.Message,
     state: FSMContext
 ) -> None:
-    final_order_data = await state.get_data()
+    order_data = await state.get_data()
+    order_str = str(json.dumps(order_data, ensure_ascii=False))
     await message.answer(
-        text=(f"Ваш заказ: {json.dumps(final_order_data, ensure_ascii=False)} "
-              "направлен администратору."),
+        text=(f"Ваш заказ: {order_str} "
+               "направлен администратору."),
         reply_markup=types.ReplyKeyboardRemove()
     )
+    
+    current_utctime = datetime.utcnow() + timedelta(hours=7)
+    write_to_gsheet(current_date = str(date.today()),
+                    current_tomsk_time = current_utctime.strftime("%H:%M"),
+                    user_name = f"{message.from_user.last_name} {message.from_user.first_name}",
+                    order_str = order_str
+    )
+
     await state.clear()
