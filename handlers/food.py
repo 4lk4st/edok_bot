@@ -7,7 +7,9 @@ from aiogram.filters.command import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from keyboards import make_row_keyboard, start_keyboard, menu
+from keyboards import (make_sections_keyboard, make_food_keyboard,
+                        start_keyboard, menu, get_menu_sections,
+                        get_food_list)
 from create_bot import bot
 from create_gsheet import write_to_gsheet
 
@@ -15,12 +17,14 @@ from create_gsheet import write_to_gsheet
 router = Router()
 
 class OrderFood(StatesGroup):
+    choosing_section = State()
     choosing_food = State()
 
 
 @router.message(CommandStart())
 async def command_start(
     message: types.Message,
+    state: FSMContext
 ) -> None:
     await message.answer("Привет! Ты можешь посмотреть меню или сделать заказ!",
                          reply_markup=start_keyboard)
@@ -36,14 +40,27 @@ async def send_menu(
                          reply_markup=start_keyboard)
 
 
-@router.message(StateFilter(None), F.text.lower() == "сделать заказ")
+@router.message(F.text.lower() == "сделать заказ")
 async def open_menu_kb(
     message: types.Message,
     state: FSMContext
 ) -> None:
     await message.answer(
-        "Чтобы сделать заказ, выбери блюдо!",
-        reply_markup=make_row_keyboard(list(menu.keys()))
+        "Чтобы сделать заказ, выбери раздел меню!",
+        reply_markup=make_sections_keyboard(get_menu_sections())
+    )
+    await state.set_state(OrderFood.choosing_section)
+
+
+@router.message(OrderFood.choosing_section,
+                F.text.in_(get_menu_sections()))
+async def open_menu_kb(
+    message: types.Message,
+    state: FSMContext
+) -> None:
+    await message.answer(
+        "Чтобы сделать заказ, нажми на кнопку блюда!",
+        reply_markup=make_food_keyboard(get_food_list(message.text))
     )
     
     await state.set_state(OrderFood.choosing_food)
@@ -51,7 +68,8 @@ async def open_menu_kb(
 
 @router.message(
     OrderFood.choosing_food,
-    F.text.in_(list(menu.keys())))
+    F.text.in_(get_food_list())
+)
 async def choose_food(
     message: types.Message,
     state: FSMContext
