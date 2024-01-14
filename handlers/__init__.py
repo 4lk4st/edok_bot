@@ -1,2 +1,1 @@
-from handlers import food
-from handlers import other
+from handlers import food, other
