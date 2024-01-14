@@ -25,3 +25,11 @@ def get_food_list(section:str) -> list[str]:
     food_list = list(menu[today_str][section].keys())
 
     return food_list
+
+def get_all_food() -> list[str]:
+    all_food_list:list = []
+    for section in get_menu_sections():
+        for food in get_food_list(section):
+            all_food_list.append(food)
+
+    return all_food_list

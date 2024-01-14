@@ -13,6 +13,17 @@ start_keyboard = types.ReplyKeyboardMarkup(
     input_field_placeholder="Выбери действие"
 )
 
+back_kb = [
+    [types.KeyboardButton(text="Выслать меню"),
+    types.KeyboardButton(text="Вернутся к разделам")]
+]
+
+back_keyboard = types.ReplyKeyboardMarkup(
+    keyboard=back_kb,
+    resize_keyboard=True,
+    input_field_placeholder="Выбери действие"
+)
+
 
 def make_sections_keyboard(items: list[str]) -> types.ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
@@ -28,7 +39,6 @@ def make_sections_keyboard(items: list[str]) -> types.ReplyKeyboardMarkup:
     )
 
     return user_keyboard
-
 
 
 def make_food_keyboard(items: list[str]) -> types.ReplyKeyboardMarkup:

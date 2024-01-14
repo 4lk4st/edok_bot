@@ -2,14 +2,13 @@ import json
 from datetime import date, datetime, timedelta
 
 from aiogram import types, Router, F
-from aiogram.filters import StateFilter
 from aiogram.filters.command import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from keyboards import (make_sections_keyboard, make_food_keyboard,
-                        start_keyboard, menu, get_menu_sections,
-                        get_food_list)
+                        start_keyboard, get_menu_sections,
+                        get_food_list, get_all_food, back_keyboard)
 from create_bot import bot
 from create_gsheet import write_to_gsheet
 
@@ -41,6 +40,7 @@ async def send_menu(
 
 
 @router.message(F.text.lower() == "сделать заказ")
+@router.message(F.text.lower() == "вернутся к разделам")
 async def open_menu_kb(
     message: types.Message,
     state: FSMContext
@@ -58,17 +58,21 @@ async def open_menu_kb(
     message: types.Message,
     state: FSMContext
 ) -> None:
+    await state.update_data(
+        {"section": f"{message.text}"}
+    )
+    get_all_data = await state.get_data()
+    get_current_section = get_all_data["section"]
     await message.answer(
         "Чтобы сделать заказ, нажми на кнопку блюда!",
-        reply_markup=make_food_keyboard(get_food_list(message.text))
+        reply_markup=make_food_keyboard(get_food_list(get_current_section))
     )
-    
     await state.set_state(OrderFood.choosing_food)
 
 
 @router.message(
     OrderFood.choosing_food,
-    F.text.in_(get_food_list())
+    F.text.in_(get_all_food())
 )
 async def choose_food(
     message: types.Message,
@@ -88,23 +92,27 @@ async def choose_food(
         )
     
     final_order_data = await state.get_data()
+    final_order_data.pop("section")
     await message.answer(
         text=f"Вы выбрали: {json.dumps(final_order_data, ensure_ascii=False)}."
     )
+    get_all_data = await state.get_data()
+    get_current_section = get_all_data["section"]
     await message.answer(
-        text=("Добавление блюд в заказ - кнопка с соответствующим блюдом, " 
-              "завершение заказа - кнопка 'Завершить заказ'"),
-        reply_markup=make_row_keyboard(list(menu.keys()))
+        text=("Добавьте ещё блюдо в заказ, перейдите в другой раздел меню, " 
+              "или завершите заказ!"),
+        reply_markup=make_food_keyboard(get_food_list(get_current_section))
     )
 
+
 @router.message(
-    OrderFood.choosing_food,
     F.text.lower() == "завершить заказ")
 async def send_order(
     message: types.Message,
     state: FSMContext
 ) -> None:
     order_data = await state.get_data()
+    order_data.pop("section")
     order_str = str(json.dumps(order_data, ensure_ascii=False))
     await message.answer(
         text=(f"Ваш заказ: {order_str} "
@@ -120,3 +128,32 @@ async def send_order(
     )
 
     await state.clear()
+
+    await message.answer(
+        text=("Для формирования нового заказа нажмите или введите /start"),
+        reply_markup=types.ReplyKeyboardRemove()
+    )
+
+
+@router.message(
+    OrderFood.choosing_food,
+    F.text.lower() == "в другой раздел меню")
+async def another_section(
+    message: types.Message,
+    state: FSMContext
+) -> None:
+    await message.answer(
+        "Чтобы сделать заказ, выбери раздел меню!",
+        reply_markup=make_sections_keyboard(get_menu_sections())
+    )
+    await state.set_state(OrderFood.choosing_section)
+
+
+@router.message(
+    F.text.lower() == "назад")
+async def command_back(
+    message: types.Message,
+    state: FSMContext
+) -> None:
+    await message.answer("Ты можешь посмотреть меню или вернутся к разделам!",
+                         reply_markup=back_keyboard)
