@@ -1,5 +1,4 @@
 import json
-from datetime import date, datetime, timedelta
 
 from aiogram import types, Router, F
 from aiogram.fsm.context import FSMContext
@@ -10,7 +9,7 @@ from keyboards import (make_sections_keyboard, make_food_keyboard,
                         get_food_list, get_all_food, back_keyboard)
 from create_gsheet import write_to_gsheet
 
-from handlers.services import add_food_to_order
+from handlers.services import add_food_to_order, send_order_info_to_chat
 
 
 router = Router()
@@ -83,21 +82,8 @@ async def send_order(
     message: types.Message,
     state: FSMContext
 ) -> None:
-    order_data = await state.get_data()
-    order_data.pop("current_section")
-    order_str = str(json.dumps(order_data, ensure_ascii=False))
-    await message.answer(
-        text=(f"Ваш заказ: {order_str} "
-               "направлен администратору."),
-        reply_markup=types.ReplyKeyboardRemove()
-    )
-    
-    current_utctime = datetime.utcnow() + timedelta(hours=7)
-    write_to_gsheet(current_date = str(date.today()),
-                    current_tomsk_time = current_utctime.strftime("%H:%M"),
-                    user_name = f"{message.from_user.last_name} {message.from_user.first_name}",
-                    order_str = order_str
-    )
+    await send_order_info_to_chat(message, state)   
+    await write_to_gsheet(message, state)
 
     await state.clear()
 
