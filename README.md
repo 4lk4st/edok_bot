@@ -9,9 +9,10 @@ Telegram bot for ordering food in small company.
 - [x] separate project structure
 - [x] dynamic keyboard for menu
 - [x] sending menu pic / order button
-- [х] FSM for ordering
-- [х] integration with database (Google Sheets)
-- [ ] pivot table
+- [x] FSM for ordering
+- [x] integration with database (Google Sheets)
+- [x] pivot table
+- [ ] pretty order message 
 - [ ] notification for users in weekend-days (outer middleware)
 - [ ] Dockerfile for remote server
 - [ ] CI
