@@ -41,19 +41,16 @@ async def add_food_to_order(
         await state.set_data(current_order_data)
 
 
-async def send_order_info_to_chat(
-    message: types.Message,
+async def get_order_info(
     state: FSMContext   
-) -> None:
+) -> str:
     order_data = await state.get_data()
     order_data.pop("current_section")
     price = order_data.pop("current_price")
 
-    order_str = str(json.dumps(order_data, ensure_ascii=False))
-
     message_text = ""
-
-    emoji_for_food = {
+    
+    emoji_for_section = {
         "Салаты": "\U0001F966",
         "Каши": "\U0001F365",
         "Супы": "\U0001F963",
@@ -62,12 +59,39 @@ async def send_order_info_to_chat(
         "Напитки и десерты": "\U0001F378",
     }
 
-    for key, value in order_data.items():
-        if key in emoji_for_food:
-            key = f"{emoji_for_food[key]} {key}"
+    for section, foods in order_data.items():
+        if section in emoji_for_section:
+            section = f"{emoji_for_section[section]} {section}"
             
-        message_text += f"<b>{key}</b>: {value}"
+        message_text += f"<b>{section}</b>: "
         message_text += "\n"
+        for food, quantity in foods.items():
+            message_text += f"{food} - {quantity} шт.\n"
+
+    return message_text
+
+
+async def send_intermediate_order(
+    message: types.Message,
+    state: FSMContext   
+) -> None:
+
+    order_data = await get_order_info(state)
+    message_text = "Вы выбрали:\n" + order_data
+
+    await message.answer(message_text)
+
+
+async def send_final_order(
+    message: types.Message,
+    state: FSMContext   
+) -> None:
+
+    order_data = await get_order_info(state)
+
+    message_text = ("Ваш итоговый заказ:\n\n"
+                    + order_data
+                    + "\nнаправлен администратору на обработку!")
 
     await message.answer(
         message_text,

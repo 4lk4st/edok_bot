@@ -9,7 +9,8 @@ from keyboards import (make_sections_keyboard, make_food_keyboard,
                         get_food_list, get_all_food, back_keyboard)
 from create_gsheet import write_to_gsheet
 
-from handlers.services import add_food_to_order, send_order_info_to_chat
+from handlers.services import (add_food_to_order, send_final_order,
+                               send_intermediate_order)
 
 
 router = Router()
@@ -25,6 +26,7 @@ async def open_menu_kb(
     message: types.Message,
     state: FSMContext
 ) -> None:
+       
     await message.answer(
         "Чтобы сделать заказ, выбери раздел меню!",
         reply_markup=make_sections_keyboard(get_menu_sections())
@@ -63,10 +65,8 @@ async def choose_food(
     food = message.text.lower()
     await add_food_to_order(food, state)
     
-    final_order_data = await state.get_data()
-    await message.answer(
-        text=f"Вы выбрали: {json.dumps(final_order_data, ensure_ascii=False)}."
-    )
+    await send_intermediate_order(message, state)
+
     get_all_data = await state.get_data()
     get_current_section = get_all_data["current_section"]
     await message.answer(
@@ -82,7 +82,7 @@ async def send_order(
     message: types.Message,
     state: FSMContext
 ) -> None:
-    await send_order_info_to_chat(message, state)   
+    await send_final_order(message, state)   
     await write_to_gsheet(message, state)
 
     await state.clear()
