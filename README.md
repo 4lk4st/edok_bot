@@ -11,7 +11,7 @@ Telegram bot for ordering food in small company.
 - [x] sending menu pic / order button
 - [x] FSM for ordering
 - [x] integration with database (Google Sheets)
-- [x] pivot table
+- [x] order writing format, which allow to automatically update pivot table on Google Sheets
 - [x] pretty order message
 - [ ] order price info
 - [ ] notification for users in weekend-days (outer middleware)
