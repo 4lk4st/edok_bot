@@ -5,6 +5,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.formatting import (as_list, as_marked_section,
                                       Bold, as_key_value, HashTag, Text)
 
+from keyboards.dao import get_food_price
+
 
 order_json_example = {
     "current_section": "Салаты",
@@ -27,18 +29,28 @@ async def add_food_to_order(
     current_order_data = await state.get_data()
     current_section = current_order_data["current_section"]
 
+    # если в информации о заказе нет упоминания о данном разделе
+    # то создаем и раздел и запись о заказе блюда
     if current_section not in current_order_data:
         await state.update_data(
             {current_section: {f"{food}": 1}}
         )
+    # если в информации о заказе уже есть блюдо из данного раздела
+    # но не то, которое мы заказываем - записываем в нужный раздел
     elif ((current_section in current_order_data)
         and (food not in current_order_data[current_section])):
         current_order_data[current_section].update({f"{food}": 1})
         await state.set_data(current_order_data)
+    # если в информации о заказе уже есть блюдо из данного раздела
+    # и мы его уже включили в заказ - добавляем +1 к количеству
     else:
         current_quantity = current_order_data[current_section][food]
         current_order_data[current_section][food] = current_quantity + 1
         await state.set_data(current_order_data)
+
+    current_order_data = await state.get_data()
+    current_order_data["current_price"] += get_food_price(current_section, food.capitalize())
+    await state.set_data(current_order_data)
 
 
 async def get_order_info(
@@ -67,6 +79,8 @@ async def get_order_info(
         message_text += "\n"
         for food, quantity in foods.items():
             message_text += f"{food} - {quantity} шт.\n"
+    
+    message_text += f"<b>Стоимость заказа</b>: {price} руб.\n"
 
     return message_text
 

@@ -33,3 +33,13 @@ def get_all_food() -> list[str]:
             all_food_list.append(food)
 
     return all_food_list
+
+def get_food_price(section:str, food:str) -> int:
+    
+    # удалить
+    print(today_str)
+    print(section)
+    print(food)
+    print(menu[today_str][section])
+    
+    return menu[today_str][section][food]["цена"]
