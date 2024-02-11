@@ -8,6 +8,7 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
 from handlers.services import get_clear_order
+from keyboards.dao import get_food_price
 
 
 SERVICE_ACCOUNT_FILE = 'creds.json'
@@ -27,15 +28,19 @@ async def write_to_gsheet(
     current_time_in_str = current_tomsk_time.strftime("%H:%M")
 
     order_data = await get_clear_order(state)
-    order_str = str(json.dumps(order_data, ensure_ascii=False))
 
     user_name = f"{message.from_user.last_name} {message.from_user.first_name}"
     
     for section in order_data.keys():
         for food in order_data[section]:
+          
+            food_price = get_food_price(section, food.capitalize())
+            quantity = order_data[section][food]
+            food_cost = food_price * quantity
+
             service.spreadsheets().values().append(
                 spreadsheetId=SPREADSHEET_ID,
-                range="Sheet1!B:G",
+                range="Главная!B:H",
                 valueInputOption="USER_ENTERED",
                 body={
                     "majorDimension": "ROWS",
@@ -45,7 +50,9 @@ async def write_to_gsheet(
                         f"{user_name}",
                         f"{section}",
                         f"{food}",
-                        f"{order_data[section][food]}"
+                        f"{quantity}",
+                        f"{food_price}",
+                        f"{food_cost}",
                         ],
                     ]
                 }
