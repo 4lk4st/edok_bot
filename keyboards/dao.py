@@ -14,7 +14,7 @@ NUMBER_DAY = {
 }
 
 today_number = datetime.weekday(datetime.today())
-today_str = NUMBER_DAY[today_number]
+today_str = NUMBER_DAY[today_number] if today_number in range(5) else "Понедельник"
 
 def get_menu_sections() -> list[str]:
     menu_sections = list(menu[today_str].keys())

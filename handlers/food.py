@@ -20,8 +20,8 @@ class OrderFood(StatesGroup):
     choosing_food = State()
 
 
-@router.message(F.text.lower() == "сделать заказ")
-@router.message(F.text.lower() == "вернутся к разделам")
+@router.message(F.text == "\U0001F32D Сделать заказ")
+@router.message(F.text == "\U0001F51D Вернутся к разделам")
 async def open_menu_kb(
     message: types.Message,
     state: FSMContext
@@ -77,7 +77,7 @@ async def choose_food(
 
 
 @router.message(
-    F.text.lower() == "завершить заказ")
+    F.text == "\U0001F680 Завершить заказ")
 async def send_order(
     message: types.Message,
     state: FSMContext
@@ -95,7 +95,7 @@ async def send_order(
 
 @router.message(
     OrderFood.choosing_food,
-    F.text.lower() == "в другой раздел меню")
+    F.text == "\U0001F51D В другой раздел меню")
 async def another_section(
     message: types.Message,
     state: FSMContext
@@ -108,7 +108,7 @@ async def another_section(
 
 
 @router.message(
-    F.text.lower() == "назад")
+    F.text == "\U0001F519 Назад")
 async def command_back(
     message: types.Message,
 ) -> None:

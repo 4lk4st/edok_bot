@@ -3,8 +3,8 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
 start_kb = [
-    [types.KeyboardButton(text="Выслать меню"),
-    types.KeyboardButton(text="Сделать заказ")]
+    [types.KeyboardButton(text="\U0001F4D1 Выслать меню"),
+    types.KeyboardButton(text="\U0001F32D Сделать заказ")]
 ]
 
 start_keyboard = types.ReplyKeyboardMarkup(
@@ -14,8 +14,8 @@ start_keyboard = types.ReplyKeyboardMarkup(
 )
 
 back_kb = [
-    [types.KeyboardButton(text="Выслать меню"),
-    types.KeyboardButton(text="Вернутся к разделам")]
+    [types.KeyboardButton(text="\U0001F4D1 Выслать меню"),
+    types.KeyboardButton(text="\U0001F51D Вернутся к разделам")]
 ]
 
 back_keyboard = types.ReplyKeyboardMarkup(
@@ -30,8 +30,8 @@ def make_sections_keyboard(items: list[str]) -> types.ReplyKeyboardMarkup:
     for item in items:
         builder.add(types.KeyboardButton(text=str(item)))
     builder.adjust(3)
-    builder.add(types.KeyboardButton(text="Назад"))
-    builder.add(types.KeyboardButton(text="Завершить заказ"))
+    builder.add(types.KeyboardButton(text="\U0001F519 Назад"))
+    builder.add(types.KeyboardButton(text="\U0001F680 Завершить заказ"))
     builder.adjust(2)
 
     user_keyboard = builder.as_markup(
@@ -46,8 +46,8 @@ def make_food_keyboard(items: list[str]) -> types.ReplyKeyboardMarkup:
     for item in items:
         builder.add(types.KeyboardButton(text=str(item)))
     builder.adjust(3)
-    builder.add(types.KeyboardButton(text="В другой раздел меню"))
-    builder.add(types.KeyboardButton(text="Завершить заказ"))
+    builder.add(types.KeyboardButton(text="\U0001F51D В другой раздел меню"))
+    builder.add(types.KeyboardButton(text="\U0001F680 Завершить заказ"))
     builder.adjust(2)
 
     user_keyboard = builder.as_markup(

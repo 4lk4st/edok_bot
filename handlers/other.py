@@ -23,7 +23,7 @@ async def command_start(
                          reply_markup=start_keyboard)
 
 
-@router.message(F.text.lower() == "выслать меню")
+@router.message(F.text == "\U0001F4D1 Выслать меню")
 async def send_menu(
     message: types.Message,
 ) -> None:
