@@ -79,9 +79,9 @@ async def get_order_info(
         message_text += "\n"
         for food, quantity in foods.items():
             message_text += f"{food} - {quantity} шт.\n"
-    
-    message_text += f"<b>Стоимость заказа</b>: {price} руб.\n"
 
+    message_text += f"<b>Стоимость заказа</b>: {price} руб.\n"
+    
     return message_text
 
 
@@ -103,9 +103,11 @@ async def send_final_order(
 
     order_data = await get_order_info(state)
 
-    message_text = ("Ваш итоговый заказ:\n\n"
+    message_text = ("Ваш итоговый заказ:\n"
                     + order_data
-                    + "\nнаправлен администратору на обработку!")
+                    + "\n Заказ направлен администратору для"
+                    + " формирования сводного заказа."
+                    + " Не забудьте оплатить вашу еду \U0001F609")
 
     await message.answer(
         message_text,

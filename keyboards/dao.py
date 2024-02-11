@@ -34,12 +34,5 @@ def get_all_food() -> list[str]:
 
     return all_food_list
 
-def get_food_price(section:str, food:str) -> int:
-    
-    # удалить
-    print(today_str)
-    print(section)
-    print(food)
-    print(menu[today_str][section])
-    
+def get_food_price(section:str, food:str) -> int:  
     return menu[today_str][section][food]["цена"]
