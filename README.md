@@ -15,6 +15,7 @@ Telegram bot for ordering food in small company.
 - [x] pretty order message with emoji 
 - [x] order price info to telegram output
 - [x] order price info to gsheet pivot table
+- [ ] dinamic menu shifting (from .env file)
 - [ ] menu creation from gsheets to json
 - [ ] deploy to server
 - [ ] notification for users in weekend-days (outer middleware)
