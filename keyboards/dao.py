@@ -54,7 +54,7 @@ def get_current_menu(order_date: str) -> dict:
     '''
     if order_date == "Меню не загружено":
             return {"Меню не загружено!":
-                    {"Сообщите администратору!":
+                    {"Сообщите Анастасие!":
                         {"цена": 0}}}
     
     return menu[order_date]
