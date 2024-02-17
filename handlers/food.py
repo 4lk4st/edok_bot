@@ -5,9 +5,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from keyboards import (make_sections_keyboard, make_food_keyboard,
-                        start_keyboard, get_menu_sections,
+                        get_menu_sections,
                         get_food_list, get_all_food, back_keyboard)
-from create_gsheet import write_to_gsheet
+from keyboards.dao import SHIFTING_TIME
+from keyboards.data import menu
+
+from create_gsheet import write_to_gsheet, get_order_date
 
 from handlers.services import (add_food_to_order, send_final_order,
                                send_intermediate_order)
@@ -27,6 +30,10 @@ async def open_menu_kb(
     state: FSMContext
 ) -> None:
        
+    await message.answer(
+        ("Сейчас принимаем заказы на "
+         f"<b>{get_order_date(SHIFTING_TIME, menu)}</b> \U00002757"),
+    )
     await message.answer(
         "Чтобы сделать заказ, выбери раздел меню!",
         reply_markup=make_sections_keyboard(get_menu_sections())

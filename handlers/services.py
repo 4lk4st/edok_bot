@@ -1,11 +1,7 @@
-import json
-
 from aiogram import types
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.formatting import (as_list, as_marked_section,
-                                      Bold, as_key_value, HashTag, Text)
 
-from keyboards.dao import get_food_price
+from keyboards import get_food_price, get_order_date, SHIFTING_TIME, menu
 
 
 order_json_example = {
@@ -103,11 +99,12 @@ async def send_final_order(
 
     order_data = await get_order_info(state)
 
-    message_text = ("Ваш итоговый заказ:\n"
+    message_text = ("Ваш итоговый заказ на "
+                    + f"<b>{get_order_date(SHIFTING_TIME, menu)}</b>:\n"
                     + order_data
-                    + "\n Заказ направлен администратору для"
+                    + "\n Заказ направлен Анастасие для"
                     + " формирования сводного заказа \U0001F680."
-                    + " Не забудьте оплатить вашу еду \U0001F609")
+                    + " Не забудьте перевести деньги за еду \U0001F609")
 
     await message.answer(
         message_text,

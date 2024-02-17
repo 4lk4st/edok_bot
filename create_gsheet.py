@@ -1,5 +1,4 @@
 from datetime import date, datetime, timedelta
-import json
 
 from aiogram import types
 from aiogram.fsm.context import FSMContext
@@ -8,7 +7,10 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
 from handlers.services import get_clear_order
-from keyboards.dao import get_food_price
+from keyboards.dao import (get_food_price, SHIFTING_TIME,
+                           convert_hm_to_int, get_next_menu_day,
+                           get_order_date)
+from keyboards.data import menu
 
 
 SERVICE_ACCOUNT_FILE = 'creds.json'
@@ -28,7 +30,6 @@ async def write_to_gsheet(
     current_time_in_str = current_tomsk_time.strftime("%H:%M")
 
     order_data = await get_clear_order(state)
-
     user_name = f"{message.from_user.last_name} {message.from_user.first_name}"
     
     for section in order_data.keys():
@@ -40,13 +41,14 @@ async def write_to_gsheet(
 
             service.spreadsheets().values().append(
                 spreadsheetId=SPREADSHEET_ID,
-                range="Главная!B:H",
+                range="Главная!B:J",
                 valueInputOption="USER_ENTERED",
                 body={
                     "majorDimension": "ROWS",
                     "values": [
                         [f"{current_date}",
                         f"{current_time_in_str}",
+                        f"{get_order_date(SHIFTING_TIME, menu)}",
                         f"{user_name}",
                         f"{section}",
                         f"{food}",

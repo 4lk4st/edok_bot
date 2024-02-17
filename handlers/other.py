@@ -29,7 +29,7 @@ async def send_menu(
 ) -> None:
     document = types.FSInputFile("data/menu_example.pdf", filename="menu.pdf")
     await bot.send_document(chat_id=message.chat.id, document=document)
-    await message.answer("Вот актуальное меню!",
+    await message.answer("Вот актуальное меню на неделю!",
                          reply_markup=start_keyboard)
 
 
