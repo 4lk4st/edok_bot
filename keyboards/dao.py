@@ -74,9 +74,14 @@ def get_food_list(section:str) -> list[str]:
 
 def get_all_food() -> list[str]:
     all_food_list:list = []
-    for section in get_menu_sections():
-        for food in get_food_list(section):
-            all_food_list.append(food)
+    # for section in get_menu_sections():
+    #     for food in get_food_list(section):
+    #       all_food_list.append(food)
+    for date in menu:
+        day_menu = menu[date]
+        for section in day_menu:
+            for food in day_menu[section]:
+                all_food_list.append(food)
 
     return all_food_list
 

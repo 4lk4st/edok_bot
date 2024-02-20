@@ -1,5 +1,3 @@
-import json
-
 from aiogram import types, Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -22,7 +20,7 @@ class OrderFood(StatesGroup):
     choosing_section = State()
     choosing_food = State()
 
-
+# роутер входа в список разделов меню
 @router.message(F.text == "\U0001F32D Сделать заказ")
 @router.message(F.text == "\U0001F51D Вернутся к разделам")
 async def open_menu_kb(
@@ -40,7 +38,7 @@ async def open_menu_kb(
     )
     await state.set_state(OrderFood.choosing_section)
 
-
+# роутер входа в конкретный раздел меню
 @router.message(
     OrderFood.choosing_section,
     F.text.in_(get_menu_sections())
@@ -54,13 +52,14 @@ async def open_menu_kb(
     )
     get_all_data = await state.get_data()
     get_current_section = get_all_data["current_section"]
+
     await message.answer(
         "Чтобы сделать заказ, нажми на кнопку блюда!",
         reply_markup=make_food_keyboard(get_food_list(get_current_section))
     )
     await state.set_state(OrderFood.choosing_food)
 
-
+# роутер обработки нажатия на название блюда
 @router.message(
     OrderFood.choosing_food,
     F.text.in_(get_all_food())
@@ -69,6 +68,7 @@ async def choose_food(
     message: types.Message,
     state: FSMContext
 ) -> None:
+
     food = message.text.lower()
     await add_food_to_order(food, state)
     
@@ -82,7 +82,7 @@ async def choose_food(
         reply_markup=make_food_keyboard(get_food_list(get_current_section))
     )
 
-
+# роутер обработки кнопки "Завершить заказ"
 @router.message(
     F.text == "\U0001F680 Завершить заказ")
 async def send_order(
@@ -99,7 +99,7 @@ async def send_order(
         reply_markup=types.ReplyKeyboardRemove()
     )
 
-
+# роутер обработки кнопки "В другой раздел меню"
 @router.message(
     OrderFood.choosing_food,
     F.text == "\U0001F51D В другой раздел меню")
@@ -113,7 +113,7 @@ async def another_section(
     )
     await state.set_state(OrderFood.choosing_section)
 
-
+# роутер обработки кнопки "Назад"
 @router.message(
     F.text == "\U0001F519 Назад")
 async def command_back(
