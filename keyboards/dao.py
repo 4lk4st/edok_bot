@@ -28,13 +28,14 @@ def get_next_menu_day(menu: dict) -> str:
     # если следующего дня в меню нет - вернуть "заглушку"
     return "Меню не загружено"
 
+
 def get_order_date(shifting_time:str, menu:dict) -> str:
     '''
     Выдает день, на который нужно показать меню пользователю.
     Выбор дня зависит от наличия меню "на сегодня"
     и времени дня относительно константы TIME_SHIFT.
     '''
-    current_tomsk_time = datetime.today()
+    current_tomsk_time = datetime.utcnow() + timedelta(hours=7)
     current_day_str = current_tomsk_time.strftime("%Y-%m-%d")
     current_time_str = current_tomsk_time.strftime("%H:%M")
 
