@@ -6,11 +6,6 @@ pid=$(pgrep -f "python main.py")
 # Остановка процесса с данным id
 kill $pid
 
-# Переход в директорию /usr/local/bin/edok_bot/
-cd /usr/local/bin/edok_bot/
-
-# Запуск виртуального окружения
-source venv/bin/activate
-
 # Запуск бота python main.py
+sleep 3
 nohup python main.py
