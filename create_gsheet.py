@@ -8,7 +8,6 @@ from google.oauth2 import service_account
 
 from handlers.services import get_clear_order
 from keyboards.dao import (get_food_price, SHIFTING_TIME,
-                           convert_hm_to_int, get_next_menu_day,
                            get_order_date)
 from keyboards.data import menu
 
@@ -59,4 +58,3 @@ async def write_to_gsheet(
                     ]
                 }
                 ).execute()
-    

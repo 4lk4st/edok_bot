@@ -1,9 +1,13 @@
+import subprocess
+
 from aiogram import types, Router, F
 from aiogram.filters.command import CommandStart
 from aiogram.fsm.context import FSMContext
 
 from keyboards import start_keyboard
 from create_bot import bot
+from read_from_gsheet import (write_to_data_py,
+                              create_menu_dict, read_from_gsheet)
 
 
 router = Router()
@@ -31,6 +35,20 @@ async def send_menu(
     await bot.send_document(chat_id=message.chat.id, document=document)
     await message.answer("Вот актуальное меню на неделю!",
                          reply_markup=start_keyboard)
+
+
+@router.message(F.text.lower() == "загрузи новое меню")
+async def download_menu_from_gsheet(
+    message:types.Message,
+) -> None:
+    write_to_data_py(
+        create_menu_dict(
+            read_from_gsheet()
+        )
+    )
+    await message.answer("Новое меню будет загружено из Google Sheets на сервер в течение 5 секунд!")
+    await message.answer("Бот будет перезагружен")
+    subprocess.call(['sh', 'restart_bot.sh'])
 
 
 @router.message(F.text)

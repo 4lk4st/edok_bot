@@ -17,6 +17,7 @@ def convert_hm_to_int(time_str:str) -> int:
 
     return time_int  
 
+
 def get_next_menu_day(menu: dict) -> str:
     '''
     Определяет первый будущий день, который есть в меню,
@@ -47,6 +48,7 @@ def get_order_date(shifting_time:str, menu:dict) -> str:
     else:
         return get_next_menu_day(menu)
 
+
 def get_current_menu(order_date: str) -> dict:
     '''
     Даёт меню на тот день, который надо показать сейчас пользователю,
@@ -60,6 +62,7 @@ def get_current_menu(order_date: str) -> dict:
     
     return menu[order_date]
 
+
 def get_menu_sections() -> list[str]:
     menu_sections = list(get_current_menu(
         get_order_date(SHIFTING_TIME, menu))
@@ -67,17 +70,17 @@ def get_menu_sections() -> list[str]:
 
     return menu_sections
 
+
 def get_food_list(section:str) -> list[str]:
     food_list = list(get_current_menu(
         get_order_date(SHIFTING_TIME, menu))[section].keys())
 
     return food_list
 
+
 def get_all_food() -> list[str]:
     all_food_list:list = []
-    # for section in get_menu_sections():
-    #     for food in get_food_list(section):
-    #       all_food_list.append(food)
+
     for date in menu:
         day_menu = menu[date]
         for section in day_menu:
@@ -85,6 +88,7 @@ def get_all_food() -> list[str]:
                 all_food_list.append(food)
 
     return all_food_list
+
 
 def get_food_price(section:str, food:str) -> int:  
     return get_current_menu(
