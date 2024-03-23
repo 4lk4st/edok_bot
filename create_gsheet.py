@@ -31,6 +31,8 @@ async def write_to_gsheet(
     order_data = await get_clear_order(state)
     user_name = f"{message.from_user.last_name} {message.from_user.first_name}"
     
+    response_from_google = []
+    
     for section in order_data.keys():
         for food in order_data[section]:
           
@@ -38,7 +40,8 @@ async def write_to_gsheet(
             quantity = order_data[section][food]
             food_cost = food_price * quantity
 
-            service.spreadsheets().values().append(
+            response_from_google.append(
+                service.spreadsheets().values().append(
                 spreadsheetId=SPREADSHEET_ID,
                 range="Главная!B:J",
                 valueInputOption="USER_ENTERED",
@@ -58,3 +61,6 @@ async def write_to_gsheet(
                     ]
                 }
                 ).execute()
+                )
+    
+    return len(response_from_google)

@@ -102,7 +102,8 @@ async def send_final_order(
     message_text = ("Ваш итоговый заказ на "
                     + f"<b>{get_order_date(SHIFTING_TIME, menu)}</b>:\n"
                     + order_data
-                    + "\nЗаказ направлен Анастасие на формирование \U0001F680."
+                    + "\nЗаказ записан на сервере "
+                    + "\nи передан Анастасие на формирование \U0001F680."
                     + "\nНе забудьте перевести деньги за еду \U0001F609")
 
     await message.answer(
@@ -118,3 +119,17 @@ async def get_clear_order(
     order_data.pop("current_section")
     order_data.pop("current_price")
     return order_data
+
+
+async def get_food_quantity(
+    state:FSMContext
+) -> int:
+    order_data = await get_clear_order(state)
+    
+    food_quantity = 0
+    
+    for section in order_data.keys():
+        for food in order_data[section]:
+            food_quantity += 1
+
+    return food_quantity

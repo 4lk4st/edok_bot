@@ -11,7 +11,7 @@ from keyboards.data import menu
 from create_gsheet import write_to_gsheet, get_order_date
 
 from handlers.services import (add_food_to_order, send_final_order,
-                               send_intermediate_order)
+                               send_intermediate_order, get_food_quantity)
 
 
 router = Router()
@@ -89,15 +89,25 @@ async def send_order(
     message: types.Message,
     state: FSMContext
 ) -> None:
-    await send_final_order(message, state)   
-    await write_to_gsheet(message, state)
-
-    await state.clear()
-
     await message.answer(
-        text=("Для формирования нового заказа нажмите или введите /start"),
-        reply_markup=types.ReplyKeyboardRemove()
+        text=("Отправляем ваш заказ на сервер Google..."),
     )
+    
+    respose_from_gsheets = await write_to_gsheet(message, state)
+
+    if respose_from_gsheets == await get_food_quantity(state):   
+        await send_final_order(message, state)
+        await state.clear()
+
+        await message.answer(
+            text=("Для формирования нового заказа нажмите или введите /start"),
+            reply_markup=types.ReplyKeyboardRemove()
+        )
+    else:
+        await message.answer(
+            text=("Ваш заказ по неизвестным причинам не принят сервером Google."
+                  + "\nНажмите кнопку `Завершить заказ` ещё раз")
+        )
 
 # роутер обработки кнопки "В другой раздел меню"
 @router.message(
