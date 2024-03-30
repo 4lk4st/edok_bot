@@ -33,34 +33,37 @@ async def write_to_gsheet(
     
     response_from_google = []
     
-    for section in order_data.keys():
-        for food in order_data[section]:
-          
-            food_price = get_food_price(section, food.capitalize())
-            quantity = order_data[section][food]
-            food_cost = food_price * quantity
+    try:
+        for section in order_data.keys():
+            for food in order_data[section]:
+            
+                food_price = get_food_price(section, food.capitalize())
+                quantity = order_data[section][food]
+                food_cost = food_price * quantity
 
-            response_from_google.append(
-                service.spreadsheets().values().append(
-                spreadsheetId=SPREADSHEET_ID,
-                range="Главная!B:J",
-                valueInputOption="USER_ENTERED",
-                body={
-                    "majorDimension": "ROWS",
-                    "values": [
-                        [f"{current_date}",
-                        f"{current_time_in_str}",
-                        f"{get_order_date(SHIFTING_TIME, menu)}",
-                        f"{user_name}",
-                        f"{section}",
-                        f"{food}",
-                        f"{quantity}",
-                        f"{food_price}",
-                        f"{food_cost}",
-                        ],
-                    ]
-                }
-                ).execute()
-                )
+                response_from_google.append(
+                        service.spreadsheets().values().append(
+                        spreadsheetId=SPREADSHEET_ID,
+                        range="Главная!B:J",
+                        valueInputOption="USER_ENTERED",
+                        body={
+                            "majorDimension": "ROWS",
+                            "values": [
+                                [f"{current_date}",
+                                f"{current_time_in_str}",
+                                f"{get_order_date(SHIFTING_TIME, menu)}",
+                                f"{user_name}",
+                                f"{section}",
+                                f"{food}",
+                                f"{quantity}",
+                                f"{food_price}",
+                                f"{food_cost}",
+                                ],
+                            ]
+                        }
+                        ).execute()
+                    )
+    except:
+        return "Google Sheets writing error"
     
     return len(response_from_google)

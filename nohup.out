@@ -73,3 +73,80 @@ Traceback (most recent call last):
   File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 123, in run
     raise KeyboardInterrupt()
 KeyboardInterrupt
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @NordEdokBot id=6797344572 - 'NordEdokBot'
+INFO:aiogram.event:Update id=688885773 is handled. Duration 375 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885774 is handled. Duration 281 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885775 is handled. Duration 125 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885776 is handled. Duration 296 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885777 is handled. Duration 389 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885778 is handled. Duration 375 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885779 is handled. Duration 156 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885780 is handled. Duration 125 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885781 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885782 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885783 is handled. Duration 297 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885784 is handled. Duration 125 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885785 is handled. Duration 125 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885786 is handled. Duration 297 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885787 is handled. Duration 140 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885788 is handled. Duration 188 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885789 is handled. Duration 438 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885790 is handled. Duration 265 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885791 is handled. Duration 234 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885792 is handled. Duration 125 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885793 is handled. Duration 140 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885794 is handled. Duration 265 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885795 is handled. Duration 359 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885796 is handled. Duration 438 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885797 is handled. Duration 406 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885798 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885799 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885800 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885801 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885802 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885803 is handled. Duration 265 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885804 is handled. Duration 265 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885805 is handled. Duration 311 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885806 is handled. Duration 186 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885807 is handled. Duration 125 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885808 is handled. Duration 281 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885809 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885810 is handled. Duration 140 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885811 is handled. Duration 202 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885812 is handled. Duration 250 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688885813 is handled. Duration 234 ms by bot id=6797344572
+INFO:googleapiclient.discovery_cache:file_cache is only supported with oauth2client<4.0.0
+INFO:aiogram.event:Update id=688885814 is handled. Duration 8406 ms by bot id=6797344572
+INFO:aiogram.dispatcher:Polling stopped
+INFO:aiogram.dispatcher:Polling stopped for bot @NordEdokBot id=6797344572 - 'NordEdokBot'
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "D:\Dev\!PROJECTS\edok_bot\main.py", line 15, in main
+    await dp.start_polling(bot)
+  File "D:\Dev\!PROJECTS\edok_bot\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 543, in start_polling
+    done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\tasks.py", line 428, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\tasks.py", line 535, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\!PROJECTS\edok_bot\main.py", line 22, in <module>
+    asyncio.run(main())
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt

@@ -90,24 +90,22 @@ async def send_order(
     state: FSMContext
 ) -> None:
     await message.answer(
-        text=("Отправляем ваш заказ на сервер Google..."),
+        text=("Отправляем ваш заказ на сервер Google, ожидайте ответ в течение 10 секунд..."),
     )
     
     respose_from_gsheets = await write_to_gsheet(message, state)
-
-    if respose_from_gsheets == await get_food_quantity(state):   
+    if respose_from_gsheets == await get_food_quantity(state):
         await send_final_order(message, state)
         await state.clear()
-
         await message.answer(
             text=("Для формирования нового заказа нажмите или введите /start"),
             reply_markup=types.ReplyKeyboardRemove()
         )
-    else:
+    elif respose_from_gsheets == "Google Sheets writing error":
         await message.answer(
             text=("Ваш заказ по неизвестным причинам не принят сервером Google."
-                  + "\nНажмите кнопку `Завершить заказ` ещё раз")
-        )
+                + "\nНажмите кнопку `Завершить заказ` ещё раз"
+                + "\nили введите /start и сделайте заказ заново"))
 
 # роутер обработки кнопки "В другой раздел меню"
 @router.message(
