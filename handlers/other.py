@@ -41,14 +41,18 @@ async def send_menu(
 async def download_menu_from_gsheet(
     message:types.Message,
 ) -> None:
-    write_to_data_py(
-        create_menu_dict(
-            read_from_gsheet()
+    try:
+        write_to_data_py(
+            create_menu_dict(
+                read_from_gsheet()
+            )
         )
-    )
-    await message.answer("Новое меню будет загружено из Google Sheets на сервер в течение 5 секунд!")
-    await message.answer("Бот будет перезагружен")
-    subprocess.call(['sh', 'restart_bot.sh'])
+        await message.answer("Новое меню будет загружено из Google Sheets на сервер в течение 5 секунд!")
+        await message.answer("Бот будет перезагружен")
+        subprocess.call(['sh', 'restart_bot.sh'])
+
+    except:
+        await message.answer("Проблемы с загрузкой меню из Google Sheets, проверьте внимательно таблицу!")
 
 
 @router.message(F.text)

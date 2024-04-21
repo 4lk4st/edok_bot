@@ -150,3 +150,59 @@ Traceback (most recent call last):
   File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 123, in run
     raise KeyboardInterrupt()
 KeyboardInterrupt
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @NordEdokBot id=6797344572 - 'NordEdokBot'
+INFO:aiogram.event:Update id=688886866 is handled. Duration 312 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688886867 is handled. Duration 218 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688886868 is handled. Duration 109 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688886869 is handled. Duration 218 ms by bot id=6797344572
+INFO:googleapiclient.discovery_cache:file_cache is only supported with oauth2client<4.0.0
+INFO:aiogram.event:Update id=688886870 is handled. Duration 1890 ms by bot id=6797344572
+INFO:googleapiclient.discovery_cache:file_cache is only supported with oauth2client<4.0.0
+restart_bot.sh: line 4: pkill: command not found
+restart_bot.sh: line 5: pkill: command not found
+restart_bot.sh: line 6: pkill: command not found
+restart_bot.sh: line 7: pkill: command not found
+restart_bot.sh: line 8: pkill: command not found
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @NordEdokBot id=6797344572 - 'NordEdokBot'
+INFO:aiogram.event:Update id=688886872 is handled. Duration 327 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688886873 is handled. Duration 234 ms by bot id=6797344572
+INFO:aiogram.event:Update id=688886874 is handled. Duration 110 ms by bot id=6797344572
+INFO:googleapiclient.discovery_cache:file_cache is only supported with oauth2client<4.0.0
+INFO:aiogram.event:Update id=688886875 is handled. Duration 375 ms by bot id=6797344572
+INFO:aiogram.dispatcher:Start polling
+INFO:aiogram.dispatcher:Run polling for bot @NordEdokBot id=6797344572 - 'NordEdokBot'
+INFO:aiogram.event:Update id=688886895 is handled. Duration 422 ms by bot id=6797344572
+INFO:aiogram.dispatcher:Polling stopped
+INFO:aiogram.dispatcher:Polling stopped for bot @NordEdokBot id=6797344572 - 'NordEdokBot'
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 653, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "D:\Dev\!PROJECTS\edok_bot\main.py", line 15, in main
+    await dp.start_polling(bot)
+  File "D:\Dev\!PROJECTS\edok_bot\venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 543, in start_polling
+    done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\tasks.py", line 428, in wait
+    return await _wait(fs, timeout, return_when, loop)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\tasks.py", line 535, in _wait
+    await waiter
+asyncio.exceptions.CancelledError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Dev\!PROJECTS\edok_bot\main.py", line 22, in <module>
+    asyncio.run(main())
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 123, in run
+    raise KeyboardInterrupt()
+KeyboardInterrupt
