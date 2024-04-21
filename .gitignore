@@ -155,6 +155,9 @@ cython_debug/
 # gsheet credentials
 creds.json
 
+# Logs
+nohup.out
+
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
