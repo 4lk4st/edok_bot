@@ -41,6 +41,7 @@ async def send_menu(
 async def download_menu_from_gsheet(
     message:types.Message,
 ) -> None:
+   
     try:
         write_to_data_py(
             create_menu_dict(
@@ -53,6 +54,19 @@ async def download_menu_from_gsheet(
 
     except:
         await message.answer("Проблемы с загрузкой меню из Google Sheets, проверьте внимательно таблицу!")
+
+
+@router.message(F.document)
+async def upload_new_menu(
+    message:types.Message,
+) -> None:
+    if message.document is not None:
+        file_id = message.document.file_id
+        file = await bot.get_file(file_id)
+        file_path = file.file_path
+
+        await bot.download_file(file_path, "data/menu_example.pdf")
+        await message.answer("Новый файл меню загружается на сервер")
 
 
 @router.message(F.text)
